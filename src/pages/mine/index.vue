@@ -1,11 +1,10 @@
 <template>
-  <view class="content">
-    mine页面
-  </view>
+  <wx-login />
 </template>
 
 <script setup lang="ts">
 
+import WxLogin from "@/components/Login/WxLogin.vue";
 </script>
 
 <style>

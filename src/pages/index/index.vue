@@ -15,6 +15,7 @@ import {ref} from 'vue'
 const title = ref('Hello')
 import {useCounterStore} from '@/stores/example'
 import {exampleService} from "@/services/example.ts";
+import WxLogin from "@/components/Login/WxLogin.vue";
 
 const store = useCounterStore()
 const a = () => {
