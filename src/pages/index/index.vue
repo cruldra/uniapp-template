@@ -2,7 +2,8 @@
   <view class="content">
     <image class="logo" src="/static/logo.png" />
     <view class="text-area">
-      <text class="title">{{ title }}</text>
+      <text class="title font-900 color-red">{{ title }}</text>
+      <text class="color-blue">你好</text>
     </view>
   </view>
 </template>
