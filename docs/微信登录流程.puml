@@ -1,0 +1,31 @@
+@startuml
+actor User
+participant "小程序前端" as Frontend
+participant "微信服务器" as WxServer
+participant "后端服务器" as Backend
+database "数据库" as DB
+
+User -> Frontend: 点击登录按钮
+Frontend -> WxServer: uni.login()获取code
+WxServer -->> Frontend: 返回code
+
+User -> Frontend: 授权手机号
+Frontend -> WxServer: 获取加密的手机号数据
+WxServer -->> Frontend: 返回encryptedData和iv
+
+Frontend -> Backend: POST /login\n{code, encryptedData, iv}
+Backend -> WxServer: 校验code获取session_key
+WxServer -->> Backend: 返回session_key
+
+Backend -> Backend: 解密手机号数据
+Backend -> DB: 查询/创建用户信息
+DB -->> Backend: 返回用户数据
+Backend -> Backend: 生成token
+Backend -->> Frontend: 返回{token, userInfo}
+
+Frontend -> Frontend: 存储token和userInfo
+Frontend -> Frontend: 跳转到首页
+
+User -> Frontend: 看到首页内容
+
+@enduml

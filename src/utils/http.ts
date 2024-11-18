@@ -1,4 +1,5 @@
 import Request from 'luch-request';
+import type {ResponsePayloads} from "@/types/common.ts";
 
 
 function createRequest() {
@@ -26,6 +27,16 @@ request.interceptors.response.use(
         return response;
     },
     response => {
+        console.log(response.statusCode )
+        if (response.statusCode === 500) {
+            const data = response.data as ResponsePayloads<any>;
+            uni.showModal({
+                title: data.error?.type || '错误',
+                content: data.error?.message || '服务器错误',
+                showCancel: false
+            });
+        }
+
         return response;
     },
 );
