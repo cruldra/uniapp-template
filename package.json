@@ -53,7 +53,9 @@
     "luch-request": "^3.1.1",
     "pinia": "^2.2.6",
     "vue": "^3.5.13",
-    "vue-i18n": "^10.0.4"
+    "vue-i18n": "^10.0.4",
+    "@dongjak-extensions/http-client": "^1.6.0",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@dcloudio/types": "^3.4.14",

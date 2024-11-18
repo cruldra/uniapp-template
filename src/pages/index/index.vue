@@ -6,6 +6,7 @@
       <text class="color-blue">{{ store.count }}</text>
       <button @click="store.increment">+</button>
       <button @click="a">环境变量测试</button>
+      <button @click="b">http测试</button>
     </view>
   </view>
 </template>
@@ -15,6 +16,7 @@ import {ref} from 'vue'
 
 const title = ref('Hello')
 import {useCounterStore} from '@/stores/example'
+import {exampleService} from "@/services/example.ts";
 
 const store = useCounterStore()
 const a = () => {
@@ -22,7 +24,16 @@ const a = () => {
   console.log(import.meta.env.VITE_APP_TITLE)
   console.log(import.meta.env.MODE)
 }
-
+const b = () => {
+  console.log("b")
+  exampleService.getCars()
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+}
 </script>
 
 <style>
