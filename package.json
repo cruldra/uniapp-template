@@ -50,12 +50,13 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-4020920240930001",
     "@dcloudio/uni-mp-xhs": "3.0.0-4020920240930001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-4020920240930001",
-    "luch-request": "^3.1.1",
-    "pinia": "^2.2.6",
-    "vue": "^3.5.13",
-    "vue-i18n": "^10.0.4",
     "@dongjak-extensions/http-client": "^1.6.0",
-    "reflect-metadata": "^0.1.13"
+    "luch-request": "^3.1.1",
+    "nutui-uniapp": "^1.8.1",
+    "pinia": "^2.2.6",
+    "reflect-metadata": "^0.1.13",
+    "vue": "^3.5.13",
+    "vue-i18n": "^10.0.4"
   },
   "devDependencies": {
     "@dcloudio/types": "^3.4.14",
@@ -65,6 +66,7 @@
     "@dcloudio/vite-plugin-uni": "3.0.0-4020920240930001",
     "@vue/runtime-core": "^3.5.13",
     "@vue/tsconfig": "^0.6.0",
+    "sass": "1.66.0",
     "typescript": "^5.6.3",
     "unocss": "^0.64.1",
     "unocss-applet": "^0.8.5",

@@ -1,13 +1,11 @@
 <template>
-  <view class="content">
-    <image class="logo" src="/static/logo.png"/>
-    <view class="text-area">
-      <text class="title font-900 color-red">{{ title }}</text>
-      <text class="color-blue">{{ store.count }}</text>
-      <button @click="store.increment">+</button>
-      <button @click="a">环境变量测试</button>
-      <button @click="b">http测试</button>
-    </view>
+  <view>
+    <text class="title font-900 color-red">{{ title }}</text>
+    <text class="color-blue">{{ store.count }}</text>
+    <button @click="store.increment">+</button>
+    <button @click="a">环境变量测试</button>
+    <button @click="b">http测试</button>
+    <nut-button type="primary">主要按钮1</nut-button>
   </view>
 </template>
 
