@@ -1,16 +1,21 @@
 <template>
   <view class="content">
-    <image class="logo" src="/static/logo.png" />
+    <image class="logo" src="/static/logo.png"/>
     <view class="text-area">
       <text class="title font-900 color-red">{{ title }}</text>
-      <text class="color-blue">你好</text>
+      <text class="color-blue">{{ store.count }}</text>
+      <button @click="store.increment">+</button>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {ref} from 'vue'
+
 const title = ref('Hello')
+import {useCounterStore} from '@/stores/example'
+
+const store = useCounterStore()
 </script>
 
 <style>
