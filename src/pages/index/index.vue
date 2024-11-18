@@ -5,6 +5,7 @@
       <text class="title font-900 color-red">{{ title }}</text>
       <text class="color-blue">{{ store.count }}</text>
       <button @click="store.increment">+</button>
+      <button @click="a">环境变量测试</button>
     </view>
   </view>
 </template>
@@ -16,6 +17,12 @@ const title = ref('Hello')
 import {useCounterStore} from '@/stores/example'
 
 const store = useCounterStore()
+const a = () => {
+  // console.log(process.env.VITE_APP_TITLE)
+  console.log(import.meta.env.VITE_APP_TITLE)
+  console.log(import.meta.env.MODE)
+}
+
 </script>
 
 <style>
