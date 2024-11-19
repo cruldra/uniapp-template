@@ -48,9 +48,11 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 import {authService} from "@/services/auth.ts";
+import {useAuthStore} from "@/stores/auth.ts";
 // 控制按钮加载状态
 const loading = ref(false)
 const isAgree = ref(false)
+const authStore = useAuthStore()
 // 获取手机号
 const getPhoneNumber = async (e: any) => {
   // 用户拒绝授权
@@ -102,9 +104,7 @@ const handleDisabledClick = () => {
   })
 }
 const handleAccountLogin = () => {
-  uni.navigateTo({
-    url: '/pages/login/account'
-  })
+  authStore.setLoginType('account')
 }
 
 const showAgreement = () => {

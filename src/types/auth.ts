@@ -10,6 +10,9 @@ export interface WechatLoginResult {
 }
 
 export interface UserInfo {
+    id: number;
     avatar: string;
     nickname: string;
 }
+
+export type LoginType = 'wechat' | 'account' | 'phone';
