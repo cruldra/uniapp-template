@@ -5,15 +5,18 @@ import type {LoginType, UserInfo} from "@/types/auth.ts";
 export const useAuthStore = defineStore('auth', () => {
     const loginType = ref<LoginType>('wechat')
     const userInfo = ref<UserInfo>()
-
+    const token = ref<string>()
     const isLoggedIn = computed(() => !!userInfo.value?.id)
 
-    function setLoginType(type: LoginType) {
+    const setLoginType = (type: LoginType) => {
         loginType.value = type
     }
 
-    function setUserInfo(info: any) {
+    const setUserInfo = (info: any) => {
         userInfo.value = info
+    }
+    const setToken = (tokenStr: string) => {
+        token.value = tokenStr
     }
 
 
@@ -21,7 +24,11 @@ export const useAuthStore = defineStore('auth', () => {
         loginType,
         userInfo,
         isLoggedIn,
+        token,
         setLoginType,
-        setUserInfo
+        setUserInfo,
+        setToken
     }
-})
+}, {
+    persist: true,
+},)

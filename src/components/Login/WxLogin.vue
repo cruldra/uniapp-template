@@ -77,11 +77,10 @@ const getPhoneNumber = async (e: any) => {
       iv: e.detail.iv
     }))
 
-
     // 3. 保存登录态
     const {token, userInfo} = res.data!!
-    uni.setStorageSync('token', token)
-    uni.setStorageSync('userInfo', userInfo)
+    authStore.setToken(token)
+    authStore.setUserInfo(userInfo)
 
     // 4. 登录成功跳转
     /*await uni.switchTab({

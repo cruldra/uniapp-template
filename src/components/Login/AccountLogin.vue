@@ -46,7 +46,7 @@
       </view>
 
       <!-- 登录按钮 -->
-      <button class="login-btn" :disabled="!isAgree" @click="handleLogin">
+      <button class="login-btn" @click="handleLogin">
         登录
       </button>
     </view>
@@ -71,6 +71,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {useAuthStore} from "@/stores/auth.ts";
+import {authService} from "@/services/auth.ts";
 
 const authStore = useAuthStore()
 const username = ref('')
@@ -84,15 +85,21 @@ const togglePassword = () => {
 }
 
 // 处理登录
-const handleLogin = () => {
+const handleLogin = async () => {
   if (!isAgree.value) {
-    uni.showToast({
+    await uni.showToast({
       title: '请先同意用户协议和隐私政策',
       icon: 'none'
     })
     return
   }
   // 登录逻辑
+  const res = await authService.login({
+    username: username.value,
+    password: password.value
+  })
+  authStore.setToken(res.data!!.token)
+  authStore.setUserInfo(res.data!!.userInfo)
 }
 
 // 跳转服务协议
@@ -111,8 +118,8 @@ const showPrivacy = () => {
 
 // 短信登录
 const handleSmsLogin = () => {
-   authStore.setLoginType('sms')
- // console.log(1111)
+  authStore.setLoginType('sms')
+  // console.log(1111)
 }
 
 // 微信登录

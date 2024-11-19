@@ -1,8 +1,7 @@
 import {createApi, DefaultApiImpl, Post, RequestBody} from "@dongjak-extensions/http-client";
-import type {HttpResponse} from "luch-request";
 import type {ResponsePayloads} from "@/types/common.ts";
 import {request} from "@/utils/http.ts";
-import type {WechatLoginData, WechatLoginResult} from "@/types/auth.ts";
+import type {AccountLoginData, LoginResult, WechatLoginData} from "@/types/auth.ts";
 
 class AuthService extends DefaultApiImpl {
 
@@ -11,10 +10,18 @@ class AuthService extends DefaultApiImpl {
      * @param form  登录表单
      */
     @Post('/auth/wxLogin')
-    wxLogin(@RequestBody() form: WechatLoginData): Promise<ResponsePayloads<WechatLoginResult>> {
+    wxLogin(@RequestBody() form: WechatLoginData): Promise<ResponsePayloads<LoginResult>> {
         return Promise.resolve() as any
     }
 
+    /**
+     * 账号登录
+     * @param form
+     */
+    @Post('/auth/login')
+    login(@RequestBody() form: AccountLoginData): Promise<ResponsePayloads<LoginResult>> {
+        return Promise.resolve() as any
+    }
 
 }
 

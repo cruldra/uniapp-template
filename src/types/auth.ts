@@ -3,8 +3,12 @@ export interface WechatLoginData {
     encryptedData: string;
     iv: string;
 }
+export interface AccountLoginData {
+    username: string;
+    password: string;
+}
 
-export interface WechatLoginResult {
+export interface  LoginResult {
     token: string;
     userInfo: UserInfo;
 }

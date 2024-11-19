@@ -24,6 +24,13 @@ request.interceptors.request.use(
  */
 request.interceptors.response.use(
     async response => {
+        if (response.statusCode === 200) {
+            const data = response.data as ResponsePayloads<any>;
+            if (!data.error) {
+                return data as any;
+            }
+        }
+
         return response;
     },
     response => {
