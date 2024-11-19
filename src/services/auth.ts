@@ -1,4 +1,4 @@
-import {createApi, DefaultApiImpl, Post, Body} from "@dongjak-extensions/http-client";
+import {Body, createApi, DefaultApiImpl, Post} from "@dongjak-extensions/http-client";
 import type {ResponsePayloads} from "@/types/common.ts";
 import {request} from "@/utils/http.ts";
 import type {AccountLoginData, LoginResult, WechatLoginData} from "@/types/auth.ts";

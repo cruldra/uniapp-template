@@ -5,7 +5,7 @@
       <view class="form-item" @tap="chooseAvatar">
         <text class="label">头像</text>
         <view class="value-box">
-          <image class="avatar" :src="formData.avatar" mode="aspectFill"></image>
+          <image class="avatar" :src="formData.avatarUrl" mode="aspectFill"></image>
           <text class="arrow"></text>
         </view>
       </view>
@@ -102,10 +102,12 @@
 import {ref, computed} from 'vue'
 import {useAuthStore} from "@/stores/auth.ts";
 import {fileService} from "@/services/file.ts";
+import {userService} from "@/services/user.ts";
+import type {UpdateProfileRequest} from "@/types/auth.ts";
 
 const authStore = useAuthStore()
-const formData = ref({
-  avatar: authStore.userInfo?.avatar,
+const formData = ref<UpdateProfileRequest>({
+  avatarUrl: authStore.userInfo?.avatar,
   nickname: authStore.userInfo?.nickname,
   birthday: authStore.userInfo?.birthday,
   address: authStore.userInfo?.address,
@@ -129,12 +131,32 @@ const chooseAvatar = () => {
     count: 1, // 只选择一张图片
     sizeType: ['compressed'], // 压缩图片
     sourceType: ['album', 'camera'], // 允许从相册选择和拍照
-    success: (res) => {
+    success: async (res) => {
       //const a = res.tempFiles[0]
       // uploadAvatar(res.tempFilePaths[0])
-      const formData = new FormData()
-      formData.append('file', (res.tempFiles as File[])[0])
-      fileService.upload(formData)
+      // 读取文件为base64
+      const filePath = res.tempFilePaths[0]
+      const fileName = filePath.substring(filePath.lastIndexOf('/') + 1)
+      const base64 = await new Promise((resolve, reject) => {
+        uni.getFileSystemManager().readFile({
+          filePath: filePath,
+          encoding: 'base64',
+          success: (res) => resolve(res.data),
+          fail: (err) => reject(err)
+        })
+      })
+      const uploadRes = await fileService.upload({
+        file: base64 as string,
+        name: fileName,
+        use: 'avatars' // 声明文件的用途是一个用户头像
+      })
+      if (uploadRes.data?.url) {
+        await uni.showToast({
+          title: '上传成功',
+          icon: 'success'
+        })
+        formData.value.avatarUrl = uploadRes.data?.url
+      }
     },
     fail: () => {
       uni.showToast({
@@ -143,54 +165,6 @@ const chooseAvatar = () => {
       })
     }
   })
-}
-// 上传头像
-const uploadAvatar = async (filePath: string) => {
-  try {
-    await uni.showLoading({title: '上传中...'})
-    const baseUrl = import.meta.env.VITE_BASE_URL
-    const url = `${baseUrl}file/upload`
-    console.log('上传地址', url)
-    const res = await uni.uploadFile({
-      url: url,
-      filePath: filePath,
-      name: 'file',
-      header: {
-        'satoken': authStore.token,
-        'Use': 'avatars' // 声明文件的用途是一个用户头像
-      },
-    })
-    console.log(res.errMsg)
-    if (res.errMsg) {
-      await uni.showToast({
-        title: '上传失败',
-        icon: 'none'
-      })
-    }
-
-    const result = JSON.parse(res.data)
-    if (result.code === 200) {
-      formData.value.avatar = result.data.url
-      await uni.showToast({
-        title: '上传成功',
-        icon: 'success'
-      })
-    } else {
-      await uni.showToast({
-        title: '上传失败',
-        icon: 'none'
-      })
-    }
-
-  } catch (error: any) {
-    console.error(error)
-    await uni.showToast({
-      title: error.message || '上传失败',
-      icon: 'none'
-    })
-  } finally {
-    uni.hideLoading()
-  }
 }
 // 日期选择
 const showCalendar = ref(false)
@@ -231,9 +205,9 @@ const selectGender = (item: any) => {
 }
 
 // 保存资料
-const saveProfile = () => {
+const saveProfile = async () => {
   if (!formData.value.nickname) {
-    uni.showToast({
+    await uni.showToast({
       title: '请输入昵称',
       icon: 'none'
     })
@@ -241,8 +215,12 @@ const saveProfile = () => {
   }
 
   // 调用保存接口
+  const res = await userService.updateProfile(formData.value)
+  console.log('保存结果：', res)
+  if (res.data)
+    authStore.setUserInfo(res.data)
   console.log('保存的数据：', formData.value)
-  uni.showToast({
+  await uni.showToast({
     title: '保存成功',
     icon: 'success'
   })

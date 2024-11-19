@@ -14,9 +14,14 @@ export interface LoginResult {
     userInfo: UserInfo;
 }
 
-export interface FileUploadResult {
-    url: string;
+export interface UpdateProfileRequest {
+    nickname?: string;
+    birthday?: string;
+    avatarUrl?: string;
+    address?: string;
+    gender?: string;
 }
+
 
 export interface UserInfo {
     id: number;

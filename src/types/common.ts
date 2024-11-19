@@ -28,3 +28,22 @@ interface Error {
     message?: string | null;
     code?: number | null;
 }
+
+/**
+ * 文件上传数据
+ * @property file 文件的base64编码
+ * @property name 文件名
+ * @property use 文件用途
+ * @author dongjak
+ * @created 2024/11/20
+ * @version 1.0
+ * @since 1.0
+ */
+export interface FileUploadData {
+    file: string;
+    name: string;
+    use: string;
+}
+export interface FileUploadResult {
+    url: string;
+}

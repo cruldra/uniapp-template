@@ -8,7 +8,7 @@
           <image :src="authStore.userInfo?.avatar"/>
         </nut-avatar>
         <view class="user-detail">
-          <text class="username">VIP会员{{ authStore.userInfo?.id }}</text>
+          <text class="username">{{ authStore.userInfo?.nickname }}</text>
           <view class="points">
             积分:
           </view>

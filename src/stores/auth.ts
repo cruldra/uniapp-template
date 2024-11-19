@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
         loginType.value = type
     }
 
-    const setUserInfo = (info: any) => {
+    const setUserInfo = (info: UserInfo) => {
         userInfo.value = info
     }
     const setToken = (tokenStr: string) => {
