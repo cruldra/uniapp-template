@@ -2,37 +2,41 @@
   <view class="login-page">
     <!-- 顶部区域 -->
     <view class="header">
-      <text class="title">起点读书账号登录</text>
+      <text class="title">短信验证码登录</text>
     </view>
 
     <!-- 登录表单区域 -->
     <view class="form-area">
-      <!-- 账号输入框 -->
+      <!-- 手机号输入框 -->
       <view class="input-item">
-        <image class="icon" src="/static/icons/user.png" mode="aspectFit"></image>
+        <image class="icon" src="/static/icons/phone.png" mode="aspectFit"></image>
+        <text class="country-code">+86</text>
         <input
-            type="text"
-            placeholder="请输入手机号/邮箱/个性账号"
+            type="number"
+            placeholder="请输入手机号"
             placeholder-class="placeholder"
-            v-model="username"
+            maxlength="11"
+            v-model="phone"
         />
       </view>
 
-      <!-- 密码输入框 -->
+      <!-- 验证码输入框 -->
       <view class="input-item">
-        <image class="icon" src="/static/icons/password.png" mode="aspectFit"></image>
+        <image class="icon" src="/static/icons/verify.png" mode="aspectFit"></image>
         <input
-            :type="showPassword ? 'text' : 'password'"
-            placeholder="请输入密码"
+            type="number"
+            placeholder="请输入短信验证码"
             placeholder-class="placeholder"
-            v-model="password"
+            maxlength="6"
+            v-model="code"
         />
-        <image
-            class="eye-icon"
-            :src="showPassword ? '/static/icons/eye-open.png' : '/static/icons/eye-close.png'"
-            mode="aspectFit"
-            @click="togglePassword"
-        ></image>
+        <button
+            class="verify-btn"
+            :disabled="!isPhoneValid || counting"
+            @click="handleSendCode"
+        >
+          {{ counting ? `${counter}s后重试` : '获取验证码' }}
+        </button>
       </view>
 
       <!-- 协议选择 -->
@@ -46,7 +50,7 @@
       </view>
 
       <!-- 登录按钮 -->
-      <button class="login-btn" :disabled="!isAgree" @click="handleLogin">
+      <button class="login-btn" :disabled="!canLogin" @click="handleLogin">
         登录
       </button>
     </view>
@@ -55,9 +59,9 @@
     <view class="other-login">
       <view class="title">其他登录方式</view>
       <view class="methods">
-        <view class="method-item" @click="handleSmsLogin">
-          <image src="/static/icons/sms.png" mode="aspectFit"></image>
-          <text>短信登录</text>
+        <view class="method-item" @click="handleAccountLogin">
+          <image src="/static/icons/user.png" mode="aspectFit"></image>
+          <text>账号登录</text>
         </view>
         <view class="method-item" @click="handleWechatLogin">
           <image src="/static/icons/wechat.png" mode="aspectFit"></image>
@@ -69,18 +73,48 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
-import {useAuthStore} from "@/stores/auth.ts";
+import { ref, computed } from 'vue'
+import { useAuthStore } from "@/stores/auth.ts"
 
 const authStore = useAuthStore()
-const username = ref('')
-const password = ref('')
-const showPassword = ref(false)
+const phone = ref('')
+const code = ref('')
 const isAgree = ref(false)
+const counting = ref(false)
+const counter = ref(60)
 
-// 切换密码显示/隐藏
-const togglePassword = () => {
-  showPassword.value = !showPassword.value
+// 验证手机号格式
+const isPhoneValid = computed(() => {
+  return /^1[3-9]\d{9}$/.test(phone.value)
+})
+
+// 是否可以登录
+const canLogin = computed(() => {
+  return isPhoneValid.value && code.value.length === 6 && isAgree.value
+})
+
+// 发送验证码
+const handleSendCode = () => {
+  if (!isPhoneValid.value || counting.value) return
+
+  counting.value = true
+  counter.value = 60
+
+  // 倒计时
+  const timer = setInterval(() => {
+    if (counter.value > 0) {
+      counter.value--
+    } else {
+      counting.value = false
+      clearInterval(timer)
+    }
+  }, 1000)
+
+  // TODO: 调用发送验证码接口
+  uni.showToast({
+    title: '验证码已发送',
+    icon: 'none'
+  })
 }
 
 // 处理登录
@@ -92,7 +126,8 @@ const handleLogin = () => {
     })
     return
   }
-  // 登录逻辑
+
+  // TODO: 调用登录接口
 }
 
 // 跳转服务协议
@@ -109,10 +144,9 @@ const showPrivacy = () => {
   })
 }
 
-// 短信登录
-const handleSmsLogin = () => {
-   authStore.setLoginType('sms')
- // console.log(1111)
+// 账号登录
+const handleAccountLogin = () => {
+  authStore.setLoginType('account')
 }
 
 // 微信登录
@@ -153,15 +187,32 @@ const handleWechatLogin = () => {
         margin-right: 20rpx;
       }
 
+      .country-code {
+        font-size: 28rpx;
+        color: #333;
+        margin-right: 20rpx;
+      }
+
       input {
         flex: 1;
         height: 100%;
         font-size: 28rpx;
       }
 
-      .eye-icon {
-        width: 40rpx;
-        height: 40rpx;
+      .verify-btn {
+        padding: 0 20rpx;
+        height: 60rpx;
+        line-height: 60rpx;
+        font-size: 24rpx;
+        color: #ee4044;
+        background: none;
+        border: 1rpx solid #ee4044;
+        border-radius: 30rpx;
+
+        &[disabled] {
+          color: #999;
+          border-color: #999;
+        }
       }
     }
 
@@ -169,12 +220,6 @@ const handleWechatLogin = () => {
       display: flex;
       align-items: center;
       margin: 30rpx 0;
-
-      .agreement-text {
-        font-size: 24rpx;
-        color: #999;
-        margin-left: 10rpx;
-      }
 
       .link {
         color: #ee4044;

@@ -15,4 +15,4 @@ export interface UserInfo {
     nickname: string;
 }
 
-export type LoginType = 'wechat' | 'account' | 'phone';
+export type LoginType = 'wechat' | 'account' | 'sms';
