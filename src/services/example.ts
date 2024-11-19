@@ -1,4 +1,4 @@
-import {createApi, DefaultApiImpl, Post, RequestBody} from "@dongjak-extensions/http-client";
+import {createApi, DefaultApiImpl, Post} from "@dongjak-extensions/http-client";
 import {request} from "@/utils/http.ts";
 import type {HttpResponse} from "luch-request";
 import type {ResponsePayloads} from "@/types/common.ts";

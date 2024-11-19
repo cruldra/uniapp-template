@@ -18,6 +18,19 @@
       "style": {
         "navigationBarTitleText": "个人中心"
       }
+    },
+    {
+      "path": "pages/distribution/index",
+      "style": {
+        "navigationStyle": "custom",
+        "disableScroll": false
+      }
+    },
+    {
+      "path": "pages/user/profile/index",
+      "style": {
+        "navigationBarTitleText": "个人资料"
+      }
     }
   ],
   "globalStyle": {

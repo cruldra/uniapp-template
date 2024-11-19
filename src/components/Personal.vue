@@ -4,7 +4,9 @@
     <!-- 头部 -->
     <view class="header">
       <view class="user-info">
-        <nut-avatar size="large" :url="authStore.userInfo?.avatar"></nut-avatar>
+        <nut-avatar size="large">
+          <image :src="authStore.userInfo?.avatar"/>
+        </nut-avatar>
         <view class="user-detail">
           <text class="username">VIP会员{{ authStore.userInfo?.id }}</text>
           <view class="points">
@@ -20,15 +22,43 @@
       <view class="order-status">
         <view
             class="status-item"
-            v-for="(item, index) in orderStatus"
-            :key="index"
-            @tap="navigateToOrder(item.type)"
+            @tap="navigate('distribution')"
         >
           <view class="icon-wrapper">
-            <text class="badge" v-if="item.count">{{ item.count }}</text>
-            <nut-icon :name="item.icon" size="24"></nut-icon>
+            <!--            <text class="badge"  >{{ item.count }}</text>-->
+            <nut-icon name="/static/icons/share.png" size="24"></nut-icon>
           </view>
-          <text class="text">{{ item.text }}</text>
+          <text class="text">分享</text>
+        </view>
+
+        <view
+            class="status-item"
+        >
+          <view class="icon-wrapper">
+            <!--            <text class="badge"  >{{ item.count }}</text>-->
+            <nut-icon name="clock" size="24"></nut-icon>
+          </view>
+          <text class="text">分享1</text>
+        </view>
+
+        <view
+            class="status-item"
+        >
+          <view class="icon-wrapper">
+            <!--            <text class="badge"  >{{ item.count }}</text>-->
+            <nut-icon name="clock" size="24"></nut-icon>
+          </view>
+          <text class="text">分享</text>
+        </view>
+
+        <view
+            class="status-item"
+        >
+          <view class="icon-wrapper">
+            <!--            <text class="badge"  >{{ item.count }}</text>-->
+            <nut-icon name="clock" size="24"></nut-icon>
+          </view>
+          <text class="text">分享</text>
         </view>
       </view>
     </view>
@@ -58,16 +88,9 @@ import {useAuthStore} from "@/stores/auth.ts";
 
 const authStore = useAuthStore()
 
-const orderStatus = ref([
-  {type: 'pending_payment', icon: 'clock', text: '待付款', count: 1},
-  {type: 'pending_delivery', icon: 'send', text: '待发货', count: 2},
-  {type: 'pending_receipt', icon: 'cart', text: '待收货', count: 6},
-  {type: 'pending_evaluate', icon: 'comment', text: '待评价', count: 9},
-  {type: 'return', icon: 'refresh', text: '退换货', count: 0}
-])
 
 const features = ref([
-  {type: 'collection', text: '我的收藏', icon: 'star'},
+  {type: 'user/profile', text: '个人资料', icon: '/static/icons/user.png'},
   {type: 'coupon', text: '优惠券', icon: 'coupon'},
   {type: 'redpacket', text: '红包', icon: 'red-packet'},
   {type: 'task', text: '任务', icon: 'checklist'},
@@ -76,9 +99,9 @@ const features = ref([
   {type: 'address', text: '收货地址', icon: 'location'}
 ])
 
-const navigateToOrder = (type: string) => {
+const navigate = (type: string) => {
   uni.navigateTo({
-    url: `/pages/order/list?type=${type}`
+    url: `/pages/${type}/index`
   })
 }
 
